@@ -6,7 +6,7 @@
 /*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 09:38:50 by mkerkeni          #+#    #+#             */
-/*   Updated: 2022/12/18 18:03:26 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:48:48 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		i++;
 	}
 	str[i] = '\0';
+	free ((char *)s);
 	return (str);
 }
 
@@ -152,5 +153,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		ft_strcpy(str_final, str1);
 		ft_strcat(str_final, str2);
 	}
+	free ((char *)s1);
+	//free ((char *)s2);
 	return (str_final);
 }

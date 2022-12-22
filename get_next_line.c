@@ -6,7 +6,7 @@
 /*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 09:31:43 by mkerkeni          #+#    #+#             */
-/*   Updated: 2022/12/18 18:55:06 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:58:15 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*get_next_line(int fd)
 {
 	int			ret;
 	char		buf[BUFFER_SIZE + 1];
-	static char	*str;
+	static char	str;
 	int			i;
 	int			j;
 	char		*final;
@@ -65,5 +65,4 @@ char	*get_next_line(int fd)
 		final = ft_strjoin(final, str);
 	}
 	return (final);
-	free(final);
 }

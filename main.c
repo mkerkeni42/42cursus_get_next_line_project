@@ -6,7 +6,7 @@
 /*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 15:49:08 by mkerkeni          #+#    #+#             */
-/*   Updated: 2022/12/18 19:08:28 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2022/12/22 17:48:41 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@ int	main(int ac, char **av)
 		i++;
 	}
 	close(fd);
-	
+	system("leaks a.out");
 	return (0);
 }
