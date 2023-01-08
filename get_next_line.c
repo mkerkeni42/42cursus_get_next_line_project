@@ -6,120 +6,89 @@
 /*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 09:31:43 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/01/08 12:33:38 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/01/08 16:33:18 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-char	*ft_strchr(const char *s, int c)
-{
-	int		i;
-	char	*ptr;
-	size_t	s_len;
-
-	i = 0;
-	ptr = (char *)s;
-	s_len = ft_strlen(s);
-	while (ptr[i])
-	{
-		if (ptr[i] == (char)c)
-			return (ptr + i);
-		i++;
-	}
-	if (c == '\0')
-		return (ptr + s_len);
-	return (0);
-}
-
-static int	get_index(char *str, char *ptr)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] != *ptr)
-		i++;
-	return (i);
-}
-
-static char	*trim_buf(char	*buf, char *final, char *str)
+static char	*trim_buf(char	*buf, char *final, char *temp)
 {
 	int		i;
 	char	*after_nl;
 	char	*before_nl;
 
-	i = get_index(buf, ft_strchr(buf, '\n'));
+	i = 0;
+	while (buf[i] != *(ft_strchr(buf, '\n')))
+		i++;
 	before_nl = ft_substr(buf, 0, i + 1);
 	after_nl = ft_substr(buf, i + 1, ft_strlen(buf) - i);
 	final = ft_strjoin(final, before_nl, 1);
-	ft_strcpy(str, after_nl);
+	ft_strcpy(temp, after_nl);
 	free(after_nl);
 	return (final);
 }
 
-static char	*trim_str(char *str, char *final)
+static char	*trim_temp(char *temp, char *final)
 {
 	int		i;
 	char	*after_nl;
 	char	*before_nl;
 
-	i = get_index(str, ft_strchr(str, '\n'));
-	before_nl = ft_substr(str, 0, i + 1);
-	after_nl = ft_substr(str, i + 1, ft_strlen(str) - i);
+	i = 0;
+	while (temp[i] != *(ft_strchr(temp, '\n')))
+		i++;
+	before_nl = ft_substr(temp, 0, i + 1);
+	after_nl = ft_substr(temp, i + 1, ft_strlen(temp) - i);
 	final = ft_strjoin(final, before_nl, 1);
-	ft_strcpy(str, after_nl);
+	ft_strcpy(temp, after_nl);
 	free(after_nl);
+	return (final);
+}
+
+static char	*handle_error(char *final, char *temp, int bool)
+{
+	free(final);
+	if (bool == 1)
+		final = NULL;
+	temp[0] = '\0';
+	return (0);
+}
+
+char	*handle_buf(char *buf, char *temp, char *final)
+{
+	if (ft_strchr(buf, '\n') != 0)
+		final = trim_buf(buf, final, temp);
+	else
+		final = ft_strjoin(final, buf, 0);
 	return (final);
 }
 
 char	*get_next_line(int fd)
 {
-	int			ret;
-	char		buf[BUFFER_SIZE + 1];
-	static char	str[BUFFER_SIZE + 1];
-	char		*final;
+	t_list		var;
+	static char	temp[BUFFER_SIZE + 1];
 
-	ret = 1;
-	buf[0] = '\0';
-	final = malloc(sizeof(char));
-	final[0] = '\0';
+	var.ret = 1;
+	var.buf[0] = '\0';
+	var.final = malloc(sizeof(char));
+	var.final[0] = '\0';
 	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (handle_error(var.final, temp, 0));
+	if (ft_strchr(temp, '\n') != 0 && *temp)
+		return (trim_temp(temp, var.final));
+	var.final = ft_strjoin(var.final, temp, 0);
+	while (var.ret != 0 && ft_strchr(var.buf, '\n') == 0)
 	{
-		free(final);
-		return (0);
+		var.ret = read(fd, var.buf, BUFFER_SIZE);
+		if (var.ret == -1)
+			return (handle_error(var.final, temp, 0));
+		var.buf[var.ret] = '\0';
+		var.final = handle_buf(var.buf, temp, var.final);
 	}
-	if (ft_strchr(str, '\n') != 0 && *str)
-	{
-		final = trim_str(str, final);
-		return (final);
-	}
-	else
-		final = ft_strjoin(final, str, 0);
-	while (ret != 0 && ft_strchr(buf, '\n') == 0)
-	{
-		ret = read(fd, buf, BUFFER_SIZE);
-		if (ret == -1)
-		{
-			str[0] = '\0';
-			free(final);
-			return (0);
-		}
-		buf[ret] = '\0';
-		if (ft_strchr(buf, '\n') != 0)
-		{
-			final = trim_buf(buf, final, str);
-			break ;
-		}
-		else
-			final = ft_strjoin(final, buf, 0);
-	}
-	if (ret == 0 && strlen(final) == 0)
-	{
-		free(final);
-		final = NULL;
-	}
-	else if (ret == 0 && ft_strchr(str, '\n') == 0)
-		str[0] = '\0';
-	return (final);
+	if (var.ret == 0 && var.final[0] == '\0')
+		return (handle_error(var.final, temp, 1));
+	else if (var.ret == 0 && ft_strchr(temp, '\n') == 0)
+		temp[0] = '\0';
+	return (var.final);
 }
