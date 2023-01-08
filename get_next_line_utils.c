@@ -6,7 +6,7 @@
 /*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/15 09:38:50 by mkerkeni          #+#    #+#             */
-/*   Updated: 2022/12/22 17:48:48 by mkerkeni         ###   ########.fr       */
+/*   Updated: 2023/01/08 12:09:25 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,30 +18,8 @@ size_t	ft_strlen(const char *s)
 
 	i = 0;
 	while (s[i])
-	{
 		i++;
-	}
 	return (i);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int		i;
-	char	*ptr;
-	size_t	s_len;
-
-	i = 0;
-	ptr = (char *)s;
-	s_len = ft_strlen(s);
-	while (ptr[i])
-	{
-		if (ptr[i] == (char)c)
-			return (ptr + i);
-		i++;
-	}
-	if (c == '\0')
-		return (ptr + s_len);
-	return (0);
 }
 
 static char	*return_empty(char *str)
@@ -60,8 +38,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	unsigned int	i;
 
 	if (!s)
-		return (0);
-		str = NULL;
+		return (NULL);
+	str = NULL;
 	s_len = ft_strlen(s);
 	i = 0;
 	if (start > s_len)
@@ -79,7 +57,6 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		i++;
 	}
 	str[i] = '\0';
-	free ((char *)s);
 	return (str);
 }
 
@@ -113,47 +90,31 @@ char	*ft_strcat(char *dest, char *src)
 	return (dest);
 }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+char	*ft_strjoin(char *s1, char *s2, int x)
 {
-	size_t	i;
-	size_t	src_len;
-	size_t	dst_len;
-
-	if ((!dst || !src) && dstsize == 0)
-		return (0);
-	i = 0;
-	src_len = ft_strlen(src);
-	dst_len = ft_strlen(dst);
-	if (dstsize == 0 || dst_len >= dstsize)
-		return (src_len + dstsize);
-	while (src[i] && i < dstsize - 1 - dst_len)
-	{
-		dst[dst_len + i] = src[i];
-		i++;
-	}
-	dst[dst_len + i] = '\0';
-	return (dst_len + src_len);
-}
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	char	*str1;
-	char	*str2;
 	char	*str_final;
+	int		i;
 
-	str1 = (char *)s1;
-	str2 = (char *)s2;
-	if (!str1 || !str2)
+	i = 0;
+	if (!s1 || !s2)
 		return (NULL);
 	str_final = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!str_final)
 		return (NULL);
 	else
 	{
-		ft_strcpy(str_final, str1);
-		ft_strcat(str_final, str2);
+		ft_strcpy(str_final, s1);
+		/*while (s2[i] != '\0')
+		{
+			str_final[i + ft_strlen(str_final)] = s2[i];
+			i++;
+		}
+		str_final[i + ft_strlen(str_final)] = '\0';
+		printf("str_final dans strjoin: %s\n", str_final);*/
+		ft_strcat(str_final, s2);
 	}
-	free ((char *)s1);
-	//free ((char *)s2);
+	free (s1);
+	if (x == 1)
+		free (s2);
 	return (str_final);
 }
