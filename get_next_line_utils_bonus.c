@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkerkeni <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/15 09:38:50 by mkerkeni          #+#    #+#             */
-/*   Updated: 2023/01/08 17:14:23 by mkerkeni         ###   ########.fr       */
+/*   Created: 2023/01/08 16:58:43 by mkerkeni          #+#    #+#             */
+/*   Updated: 2023/01/08 17:02:34 by mkerkeni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *s)
 {
@@ -22,21 +22,23 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-char	*ft_strchr(char *s, int c)
+char	*ft_strchr(const char *s, int c)
 {
 	int		i;
+	char	*ptr;
 	size_t	s_len;
 
 	i = 0;
+	ptr = (char *)s;
 	s_len = ft_strlen(s);
-	while (s[i])
+	while (ptr[i])
 	{
-		if (s[i] == (char)c)
-			return (s + i);
+		if (ptr[i] == (char)c)
+			return (ptr + i);
 		i++;
 	}
 	if (c == '\0')
-		return (s + s_len);
+		return (ptr + s_len);
 	return (0);
 }
 
