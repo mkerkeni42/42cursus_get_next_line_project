@@ -2,7 +2,7 @@
 
 ## **Project Overview**
 The **Get Next Line** project implements the `get_next_line` function, which reads a file descriptor and returns one line at a time.
-This allows efficient handling of file input, ensuring that each call retrieves the next line until the end of the file is reached. 📖🔍
+This allows efficient handling of file input, ensuring that each call returns the next line until the end of the file is reached. 📖🔍
 
 ## **Technologies Used**
 <img src="https://cdn.worldvectorlogo.com/logos/c-1.svg" alt="C" width="40" height="40"/>
